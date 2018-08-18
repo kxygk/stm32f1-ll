@@ -1,0 +1,79 @@
+#+TITLE: Low Level API - for STM32F1 chips
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../static/worg.css" />
+#+options: num:nil
+# This will export a README.org file for Github, so that people that land in my repo know where to find the relevant webpage
+#+BEGIN_SRC org :tangle README.org :exports none
+  see description [[http://geokon-gh.github.io/stm32f1-ll/index.html][here]]
+#+END_SRC
+
+* Intro
+
+The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's inconvenient to get from the STM32 website, so I'm providing an easy to access copy here that is built without the HAL using CMake. Below I describe how I created this.
+
+* Removing the HAL
+
+To start I took the HAL as provided by STM on [[https://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef1.html][their website]]. Then I copied all the =stm32f1xx_ll_*.c= files from =STM32Cube_FW_F1_V1.6.0/Drivers/STM32F1xx_HAL_Driver/Src= over to the =src= folder and added them to library
+
+#+BEGIN_SRC cmake :tangle CMakeLists.txt
+cmake_minimum_required(VERSION 3.0)
+
+add_library(ll
+  src/stm32f1xx_ll_utils.c
+  src/stm32f1xx_ll_usb.c
+  src/stm32f1xx_ll_usart.c
+  src/stm32f1xx_ll_tim.c
+  src/stm32f1xx_ll_spi.c
+  src/stm32f1xx_ll_sdmmc.c
+  src/stm32f1xx_ll_rtc.c
+  src/stm32f1xx_ll_rcc.c
+  src/stm32f1xx_ll_pwr.c
+  src/stm32f1xx_ll_i2c.c
+  src/stm32f1xx_ll_gpio.c
+  src/stm32f1xx_ll_fsmc.c
+  src/stm32f1xx_ll_exti.c
+  src/stm32f1xx_ll_dma.c
+  src/stm32f1xx_ll_dac.c
+  src/stm32f1xx_ll_crc.c
+  src/stm32f1xx_ll_adc.c)
+#+END_SRC
+
+Next I copied over their equivalent headers from =STM32Cube_FW_F1_V1.6.0/Drivers/STM32F1xx_HAL_Driver/Inc= over to the =inc= folder. B/c of how the Low Level API is configured I needed to also copy 3 extra files: 
+
+- =stm32f1xx_hal.h=
+- =stm32f1xx_hal_def.h=
+- =stm32f1xx_hal_conf_template.h= which was copied over as =stm32f1xx_hal_conf.h=
+
+In this new =stm32f1xx_hal_conf.h= I then went to the *Module Selection* section at the top and comment out all the HAL modules starting from ~#define HAL_MODULE_ENABLED~ to completely disable the =HAL=. Next, per [[https://www.purplealienplanet.com/node/69][these instruction]] I add a ~#include "stm32f1xx_hal_def.h~ somewhere a the top in this same file
+
+Once that's all done I could add these LL-API headers
+
+#+BEGIN_SRC cmake :tangle CMakeLists.txt
+target_include_directories(ll PUBLIC inc)
+#+END_SRC
+
+* Adding the CMSIS
+
+The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors. The LL is build on top of this common layer. This is also provided to us with the STM Cube HAL under =STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS= and I copied this one over in its entirety. 
+
+Naturally since ARM boards are all different internally, there need to be a configuration step to define where these common ARM CMSIS features are actually located on any specific board. These configurations for the F1 family of chips are all located in =CMSIS/Device/ST/STM32F1xx/Include/= and as you can see there are many configration files for different members of this chip family. You may have noticed that at the top of the LL headers they all include a certain file =stm32f1xx.h=. This is a sort of “switch" file which engages the correct configuration file for the CMSIS. The file is at =CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h=. If you look at the top of this file there is a big ugly table where you can find the preprocessor switch values that you will need. So once we set this value the correct configuration file gets included and everything simply works.
+
+B/c the *bluepill* uses a =STM32F103C8T6=, this maps to a proprocessor value of =STM32F103xB=. I will provide this value by default, but any user of this library can provide another value; either on the command line when running cmake with ~cmake -DSTM32_DEVICE_GROUP=XXX~ or when included from a parent CMakeLists.txt with ~set(STM32_DEVICE_GROUP XXX CACHE STRING "Selected device group")~
+
+
+#+BEGIN_SRC cmake :tangle CMakeLists.txt
+set(STM32_DEVICE_GROUP "STM32F103xB" CACHE STRING
+ "Chip configuration as defined in stm32f1xx.h (default value for the bluepill)")
+
+target_compile_definitions(ll PUBLIC ${STM32_DEVICE_GROUP})
+target_include_directories(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
+#+END_SRC
+
+The very last step is to include the actual CMSIS itself which is simply in =CMSIS/Include=
+
+#+BEGIN_SRC cmake :tangle CMakeLists.txt
+target_include_directories(ll PUBLIC CMSIS/Include)
+#+END_SRC
+
+*Note:* The CMSIS folder is pretty huge.. It's over 60MB. Even stripped of most things it is over 10MB in size
+
+*Note:* This repository was made on =2018-08-13=. I make no promises about keeping it up to date with newer updates of the LL-API and CMSIS
