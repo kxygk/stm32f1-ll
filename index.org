@@ -12,6 +12,8 @@ The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's
 
 * Removing the HAL
 
+*Note:* The STM32 Cube HAL is under a BSD license (per the documentation)
+
 To start I took the HAL as provided by STM on [[https://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef1.html][their website]]. Then I copied all the =stm32f1xx_ll_*.c= files from =STM32Cube_FW_F1_V1.6.0/Drivers/STM32F1xx_HAL_Driver/Src= over to the =src= folder and added them to library
 
 #+BEGIN_SRC cmake :tangle CMakeLists.txt
@@ -52,6 +54,8 @@ target_include_directories(ll PUBLIC inc)
 #+END_SRC
 
 * Adding the CMSIS
+
+*Note:* The CMSIS is under the Apache 2.0 license
 
 The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors. The LL is build on top of this common layer. This is also provided to us with the STM Cube HAL under =STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS= and I copied this one over in its entirety. 
 

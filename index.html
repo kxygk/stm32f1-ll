@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Low Level API - for STM32F1 chips</title>
-<!-- 2018-08-18 Sat 13:41 -->
+<!-- 2018-08-18 Sat 13:48 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="George Kontsevich" />
@@ -162,6 +162,10 @@ The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's
 <h2 id="sec-2">Removing the HAL</h2>
 <div class="outline-text-2" id="text-2">
 <p>
+<b>Note:</b> The STM32 Cube HAL is under a BSD license (per the documentation)
+</p>
+
+<p>
 To start I took the HAL as provided by STM on <a href="https://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef1.html">their website</a>. Then I copied all the <code>stm32f1xx_ll_*.c</code> files from <code>STM32Cube_FW_F1_V1.6.0/Drivers/STM32F1xx_HAL_Driver/Src</code> over to the <code>src</code> folder and added them to library
 </p>
 
@@ -223,6 +227,10 @@ Once that's all done I could add these LL-API headers
 <h2 id="sec-3">Adding the CMSIS</h2>
 <div class="outline-text-2" id="text-3">
 <p>
+<b>Note:</b> The CMSIS is under the Apache 2.0 license
+</p>
+
+<p>
 The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors. The LL is build on top of this common layer. This is also provided to us with the STM Cube HAL under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code> and I copied this one over in its entirety. 
 </p>
 
@@ -267,7 +275,7 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: George Kontsevich</p>
-<p class="date">Created: 2018-08-18 Sat 13:41</p>
+<p class="date">Created: 2018-08-18 Sat 13:48</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
