@@ -80,4 +80,4 @@ target_include_directories(ll PUBLIC CMSIS/Include)
 
 *Note:* The CMSIS folder is pretty huge.. It's over 60MB. Even stripped of most things it is over 10MB in size
 
-*Note:* This repository was made on =2018-08-13=. I make no promises about keeping it up to date with newer updates of the LL-API and CMSIS
+*Note:* This repository was made on =2018-08-18=. I make no promises about keeping it up to date with newer updates of the LL-API and CMSIS
