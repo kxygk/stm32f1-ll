@@ -69,13 +69,19 @@ set(STM32_DEVICE_GROUP "STM32F103xB" CACHE STRING
  "Chip configuration as defined in stm32f1xx.h (default value for the bluepill)")
 
 target_compile_definitions(ll PUBLIC ${STM32_DEVICE_GROUP})
+target_compile_definitions(ll PUBLIC "USE_FULL_LL_DRIVER")
 target_include_directories(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
 #+END_SRC
 
-The very last step is to include the actual CMSIS itself which is simply in =CMSIS/Include=
+The very last step is to include the actual CMSIS itself which is simply in =CMSIS/Include= and to tell the compiler the target ARM architecture.
 
 #+BEGIN_SRC cmake :tangle CMakeLists.txt
-target_include_directories(ll PUBLIC CMSIS/Include)
+    target_include_directories(ll PUBLIC CMSIS/Include)
+    target_compile_options(ll PUBLIC
+      -mthumb
+      -mcpu=cortex-m3
+      -mfloat-abi=soft
+      -mlittle-endian)
 #+END_SRC
 
 *Note:* The CMSIS folder is pretty huge.. It's over 60MB. Even stripped of most things it is over 10MB in size

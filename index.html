@@ -249,17 +249,23 @@ B/c the <b>bluepill</b> uses a <code>STM32F103C8T6</code>, this maps to a propro
  <span style="color: #ff1f8b;">"Chip configuration as defined in stm32f1xx.h (default value for the bluepill)"</span>)
 
 <span style="color: #ef2929;">target_compile_definitions</span>(ll PUBLIC ${<span style="color: #ff8700;">STM32_DEVICE_GROUP</span>})
+<span style="color: #ef2929;">target_compile_definitions</span>(ll PUBLIC <span style="color: #ff1f8b;">"USE_FULL_LL_DRIVER"</span>)
 <span style="color: #ef2929;">target_include_directories</span>(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
 </pre>
 </div>
 
 <p>
-The very last step is to include the actual CMSIS itself which is simply in <code>CMSIS/Include</code>
+The very last step is to include the actual CMSIS itself which is simply in <code>CMSIS/Include</code> and to tell the compiler the target ARM architecture.
 </p>
 
 <div class="org-src-container">
 
 <pre class="src src-cmake"><span style="color: #ef2929;">target_include_directories</span>(ll PUBLIC CMSIS/Include)
+<span style="color: #ef2929;">target_compile_options</span>(ll PUBLIC
+  -mthumb
+  -mcpu=cortex-m3
+  -mfloat-abi=soft
+  -mlittle-endian)
 </pre>
 </div>
 
