@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Low Level API - for STM32F1 chips</title>
-<!-- 2018-08-18 Sat 13:50 -->
+<!-- 2018-08-24 Fri 22:01 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="George Kontsevich" />
@@ -227,19 +227,23 @@ Once that's all done I could add these LL-API headers
 <h2 id="sec-3">Adding the CMSIS</h2>
 <div class="outline-text-2" id="text-3">
 <p>
+The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors and STM's LL is build on top of this common layer. The CMSIS is also provided to us with the <b>STM Cube HAL</b> we downloaded - under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code>. I copied this one over in its entirety. 
+</p>
+
+<p>
 <b>Note:</b> The CMSIS is under the Apache 2.0 license
 </p>
 
 <p>
-The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors. The LL is build on top of this common layer. This is also provided to us with the STM Cube HAL under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code> and I copied this one over in its entirety. 
+Naturally ARM boards are all quite different internally, including all the boards in the STM32 family. They will have different amount of space, different peripherals available and different memory layouts. So to have a common API and to enable the programmer to program once and run on all ARM chips you also need certain parts tailored to the particular chip. These configurations for the F1 family of chips are all located in <code>CMSIS/Device/ST/STM32F1xx/Include/</code> and as you can see - even withing one chip-type each chip has it's own configration file. These files will assign generic ARM variables like GPIOA<sub>BASE</sub> to actual memory location for <i>this particular chip</i>. So once we use the CMSIS we can program directly with these labels, like GPIO<sub>BASE</sub>, and under the hood - as long as you point at the right configuration file - everything works identically on different hardware.
 </p>
 
 <p>
-Naturally since ARM boards are all different internally, there need to be a configuration step to define where these common ARM CMSIS features are actually located on any specific board. These configurations for the F1 family of chips are all located in <code>CMSIS/Device/ST/STM32F1xx/Include/</code> and as you can see there are many configration files for different members of this chip family. You may have noticed that at the top of the LL headers they all include a certain file <code>stm32f1xx.h</code>. This is a sort of “switch" file which engages the correct configuration file for the CMSIS. The file is at <code>CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h</code>. If you look at the top of this file there is a big ugly table where you can find the preprocessor switch values that you will need. So once we set this value the correct configuration file gets included and everything simply works.
+Now the STM guys lein on this CMSIS mechanism to write their whole LL-API. You maybe noticed that we didn't do any chip configuration/selection in the previous section - it was all just one library for the whole F1 group of chips. If you open up the LL headers you will see that they all include a certain file <code>stm32f1xx.h</code> - and this is in a sense the entry point to the CMSIS for the LL-API. This include acts as a sort of "switch" which engages the correct configuration file for our particular chip for the CMSIS. The actual file is at <code>CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h</code>. It's really short - so just open it up and at the top you will see a big ugly table where you can find the preprocessor switch values that you will use. Once we set this value the correct configuration file gets included and everything simply works across the whole LL
 </p>
 
 <p>
-B/c the <b>bluepill</b> uses a <code>STM32F103C8T6</code>, this maps to a proprocessor value of <code>STM32F103xB</code>. I will provide this value by default, but any user of this library can provide another value; either on the command line when running cmake with <code>cmake -DSTM32_DEVICE_GROUP=XXX</code> or when included from a parent CMakeLists.txt with <code>set(STM32_DEVICE_GROUP XXX CACHE STRING "Selected device group")</code>
+B/c the <b>bluepill</b> uses a <code>STM32F103C8T6</code>, this maps to a proprocessor value of <code>STM32F103xB</code> (you can find the actual config file as well if you want to take a look at it). I will provide this value by default in CMake, but any user of this library can provide another value; either on the command line when running cmake with <code>cmake -DSTM32_DEVICE_GROUP=XXX</code> or more properly when included from a parent CMakeLists.txt with <code>set(STM32_DEVICE_GROUP XXX CACHE STRING "Selected device group")</code>
 </p>
 
 
@@ -270,7 +274,7 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </div>
 
 <p>
-<b>Note:</b> The CMSIS folder is pretty huge.. It's over 60MB. Even stripped of most things it is over 10MB in size
+<b>Note:</b> The CMSIS folder is pretty huge.. It's over 60MB. Even stripped of most things it is over 10MB in size. However, <code>git</code> seems to compress it pretty easily
 </p>
 
 <p>
@@ -281,7 +285,7 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: George Kontsevich</p>
-<p class="date">Created: 2018-08-18 Sat 13:50</p>
+<p class="date">Created: 2018-08-24 Fri 22:01</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
