@@ -1,100 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<!-- 2019-02-27 三 15:21 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Low Level API - for STM32F1 chips</title>
-<!-- 2018-08-24 Fri 22:01 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="George Kontsevich" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { color: green; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
-    padding: 3px;
-    border: 1px solid black;
-  }
-  pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
-
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.right  { text-align: center;  }
-  th.left   { text-align: center;   }
-  th.center { text-align: center; }
-  td.right  { text-align: right;  }
-  td.left   { text-align: left;   }
-  td.center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara:nth-child(2) { display: inline; }
-  .footpara { display: block; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  /*]]>*/-->
-</style>
+<meta name="generator" content="Org mode">
+<meta name="author" content="George Kontsevich">
+<meta name="description" content="Some linear algebra in Clojure - source at https://github.com/geokon-gh/linearsystems-part2"
+>
 <link rel="stylesheet" type="text/css" href="../static/worg.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -143,24 +64,24 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">Intro</a></li>
-<li><a href="#sec-2">Removing the HAL</a></li>
-<li><a href="#sec-3">Adding the CMSIS</a></li>
+<li><a href="#org826ca78">Intro</a></li>
+<li><a href="#orgedf46c7">Removing the HAL</a></li>
+<li><a href="#org277372e">Adding the CMSIS</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Intro</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org826ca78" class="outline-2">
+<h2 id="org826ca78">Intro</h2>
+<div class="outline-text-2" id="text-org826ca78">
 <p>
 The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's inconvenient to get from the STM32 website, so I'm providing an easy to access copy here that is built without the HAL using CMake. Below I describe how I created this.
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Removing the HAL</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgedf46c7" class="outline-2">
+<h2 id="orgedf46c7">Removing the HAL</h2>
+<div class="outline-text-2" id="text-orgedf46c7">
 <p>
 <b>Note:</b> The STM32 Cube HAL is under a BSD license (per the documentation)
 </p>
@@ -170,10 +91,9 @@ To start I took the HAL as provided by STM on <a href="https://www.st.com/conten
 </p>
 
 <div class="org-src-container">
+<pre class="src src-cmake">cmake_minimum_required(VERSION 3.0)
 
-<pre class="src src-cmake"><span style="color: #ef2929;">cmake_minimum_required</span>(VERSION 3.0)
-
-<span style="color: #ef2929;">add_library</span>(ll
+add_library(ll
   src/stm32f1xx_ll_utils.c
   src/stm32f1xx_ll_usb.c
   src/stm32f1xx_ll_usart.c
@@ -199,12 +119,9 @@ Next I copied over their equivalent headers from <code>STM32Cube_FW_F1_V1.6.0/Dr
 </p>
 
 <ul class="org-ul">
-<li><code>stm32f1xx_hal.h</code>
-</li>
-<li><code>stm32f1xx_hal_def.h</code>
-</li>
-<li><code>stm32f1xx_hal_conf_template.h</code> which was copied over as <code>stm32f1xx_hal_conf.h</code>
-</li>
+<li><code>stm32f1xx_hal.h</code></li>
+<li><code>stm32f1xx_hal_def.h</code></li>
+<li><code>stm32f1xx_hal_conf_template.h</code> which was copied over as <code>stm32f1xx_hal_conf.h</code></li>
 </ul>
 
 <p>
@@ -216,16 +133,15 @@ Once that's all done I could add these LL-API headers
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-cmake"><span style="color: #ef2929;">target_include_directories</span>(ll PUBLIC inc)
+<pre class="src src-cmake">target_include_directories(ll PUBLIC inc)
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Adding the CMSIS</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org277372e" class="outline-2">
+<h2 id="org277372e">Adding the CMSIS</h2>
+<div class="outline-text-2" id="text-org277372e">
 <p>
 The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors and STM's LL is build on top of this common layer. The CMSIS is also provided to us with the <b>STM Cube HAL</b> we downloaded - under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code>. I copied this one over in its entirety. 
 </p>
@@ -248,13 +164,12 @@ B/c the <b>bluepill</b> uses a <code>STM32F103C8T6</code>, this maps to a propro
 
 
 <div class="org-src-container">
+<pre class="src src-cmake">set(STM32_DEVICE_GROUP "STM32F103xB" CACHE STRING
+ "Chip configuration as defined in stm32f1xx.h (default value for the bluepill)")
 
-<pre class="src src-cmake"><span style="color: #ef2929;">set</span>(STM32_DEVICE_GROUP <span style="color: #ff1f8b;">"STM32F103xB"</span> CACHE STRING
- <span style="color: #ff1f8b;">"Chip configuration as defined in stm32f1xx.h (default value for the bluepill)"</span>)
-
-<span style="color: #ef2929;">target_compile_definitions</span>(ll PUBLIC ${<span style="color: #ff8700;">STM32_DEVICE_GROUP</span>})
-<span style="color: #ef2929;">target_compile_definitions</span>(ll PUBLIC <span style="color: #ff1f8b;">"USE_FULL_LL_DRIVER"</span>)
-<span style="color: #ef2929;">target_include_directories</span>(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
+target_compile_definitions(ll PUBLIC ${STM32_DEVICE_GROUP})
+target_compile_definitions(ll PUBLIC "USE_FULL_LL_DRIVER")
+target_include_directories(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
 </pre>
 </div>
 
@@ -263,9 +178,8 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-cmake"><span style="color: #ef2929;">target_include_directories</span>(ll PUBLIC CMSIS/Include)
-<span style="color: #ef2929;">target_compile_options</span>(ll PUBLIC
+<pre class="src src-cmake">target_include_directories(ll PUBLIC CMSIS/Include)
+target_compile_options(ll PUBLIC
   -mthumb
   -mcpu=cortex-m3
   -mfloat-abi=soft
@@ -285,8 +199,7 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: George Kontsevich</p>
-<p class="date">Created: 2018-08-24 Fri 22:01</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2019-02-27 三 15:21</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

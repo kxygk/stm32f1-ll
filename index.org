@@ -1,4 +1,8 @@
 #+TITLE: Low Level API - for STM32F1 chips
+#+HTML_DOCTYPE: html5
+#+DESCRIPTION: Some linear algebra in Clojure - source at https://github.com/geokon-gh/linearsystems-part2
+#+OPTIONS: html-style:nil
+
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../static/worg.css" />
 #+options: num:nil
 # This will export a README.org file for Github, so that people that land in my repo know where to find the relevant webpage
