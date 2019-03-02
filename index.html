@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-02-27 三 15:21 -->
+<!-- 2019-03-02 六 11:18 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Low Level API - for STM32F1 chips</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="George Kontsevich">
-<meta name="description" content="Some linear algebra in Clojure - source at https://github.com/geokon-gh/linearsystems-part2"
+<meta name="description" content="the LL API for the STM32F1. Extracted from the STM32 Cube HAL and wrapped in CMake for convenience"
 >
 <link rel="stylesheet" type="text/css" href="../static/worg.css" />
 <script type="text/javascript">
@@ -58,30 +58,35 @@ for the JavaScript code in this tag.
 </script>
 </head>
 <body>
-<div id="content">
+<div id="org-div-home-and-up">
+ <a accesskey="h" href=".."> UP </a>
+ |
+ <a accesskey="H" href=".."> HOME </a>
+</div><div id="content">
 <h1 class="title">Low Level API - for STM32F1 chips</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org826ca78">Intro</a></li>
-<li><a href="#orgedf46c7">Removing the HAL</a></li>
-<li><a href="#org277372e">Adding the CMSIS</a></li>
+<li><a href="#orgb78fe38">Intro</a></li>
+<li><a href="#org89dd8fb">Removing the HAL</a></li>
+<li><a href="#orga93b041">Adding the CMSIS</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org826ca78" class="outline-2">
-<h2 id="org826ca78">Intro</h2>
-<div class="outline-text-2" id="text-org826ca78">
+
+<div id="outline-container-orgb78fe38" class="outline-2">
+<h2 id="orgb78fe38">Intro</h2>
+<div class="outline-text-2" id="text-orgb78fe38">
 <p>
 The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's inconvenient to get from the STM32 website, so I'm providing an easy to access copy here that is built without the HAL using CMake. Below I describe how I created this.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgedf46c7" class="outline-2">
-<h2 id="orgedf46c7">Removing the HAL</h2>
-<div class="outline-text-2" id="text-orgedf46c7">
+<div id="outline-container-org89dd8fb" class="outline-2">
+<h2 id="org89dd8fb">Removing the HAL</h2>
+<div class="outline-text-2" id="text-org89dd8fb">
 <p>
 <b>Note:</b> The STM32 Cube HAL is under a BSD license (per the documentation)
 </p>
@@ -139,9 +144,9 @@ Once that's all done I could add these LL-API headers
 </div>
 </div>
 
-<div id="outline-container-org277372e" class="outline-2">
-<h2 id="org277372e">Adding the CMSIS</h2>
-<div class="outline-text-2" id="text-org277372e">
+<div id="outline-container-orga93b041" class="outline-2">
+<h2 id="orga93b041">Adding the CMSIS</h2>
+<div class="outline-text-2" id="text-orga93b041">
 <p>
 The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors and STM's LL is build on top of this common layer. The CMSIS is also provided to us with the <b>STM Cube HAL</b> we downloaded - under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code>. I copied this one over in its entirety. 
 </p>
@@ -199,7 +204,7 @@ target_compile_options(ll PUBLIC
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: George Kontsevich</p>
-<p class="date">Created: 2019-02-27 三 15:21</p>
+<p class="date">Created: 2019-03-02 六 11:18</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
