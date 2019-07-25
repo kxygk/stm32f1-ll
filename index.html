@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-03-02 六 11:18 -->
+<!-- 2019-07-25 Thu 11:08 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Low Level API - for STM32F1 chips</title>
@@ -9,53 +9,8 @@
 <meta name="author" content="George Kontsevich">
 <meta name="description" content="the LL API for the STM32F1. Extracted from the STM32 Cube HAL and wrapped in CMake for convenience"
 >
-<link rel="stylesheet" type="text/css" href="../static/worg.css" />
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2018 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
+<link rel="stylesheet" type="text/css" href="../web/worg.css" />
+<link rel="shortcut icon" href="../web/panda.svg" type="image/x-icon">
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -68,25 +23,25 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb78fe38">Intro</a></li>
-<li><a href="#org89dd8fb">Removing the HAL</a></li>
-<li><a href="#orga93b041">Adding the CMSIS</a></li>
+<li><a href="#org2f91eb2">Intro</a></li>
+<li><a href="#org8de9a58">Removing the HAL</a></li>
+<li><a href="#orgb25c9c9">Adding the CMSIS</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgb78fe38" class="outline-2">
-<h2 id="orgb78fe38">Intro</h2>
-<div class="outline-text-2" id="text-orgb78fe38">
+<div id="outline-container-org2f91eb2" class="outline-2">
+<h2 id="org2f91eb2">Intro</h2>
+<div class="outline-text-2" id="text-org2f91eb2">
 <p>
 The STM32 Low Level API is an API provided as a part of the STM32 Cube HAL. It's inconvenient to get from the STM32 website, so I'm providing an easy to access copy here that is built without the HAL using CMake. Below I describe how I created this.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org89dd8fb" class="outline-2">
-<h2 id="org89dd8fb">Removing the HAL</h2>
-<div class="outline-text-2" id="text-org89dd8fb">
+<div id="outline-container-org8de9a58" class="outline-2">
+<h2 id="org8de9a58">Removing the HAL</h2>
+<div class="outline-text-2" id="text-org8de9a58">
 <p>
 <b>Note:</b> The STM32 Cube HAL is under a BSD license (per the documentation)
 </p>
@@ -96,9 +51,9 @@ To start I took the HAL as provided by STM on <a href="https://www.st.com/conten
 </p>
 
 <div class="org-src-container">
-<pre class="src src-cmake">cmake_minimum_required(VERSION 3.0)
+<pre class="src src-cmake"><span style="color: #006699;">cmake_minimum_required</span>(VERSION 3.0)
 
-add_library(ll
+<span style="color: #006699;">add_library</span>(ll
   src/stm32f1xx_ll_utils.c
   src/stm32f1xx_ll_usb.c
   src/stm32f1xx_ll_usart.c
@@ -138,15 +93,15 @@ Once that's all done I could add these LL-API headers
 </p>
 
 <div class="org-src-container">
-<pre class="src src-cmake">target_include_directories(ll PUBLIC inc)
+<pre class="src src-cmake"><span style="color: #006699;">target_include_directories</span>(ll PUBLIC inc)
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orga93b041" class="outline-2">
-<h2 id="orga93b041">Adding the CMSIS</h2>
-<div class="outline-text-2" id="text-orga93b041">
+<div id="outline-container-orgb25c9c9" class="outline-2">
+<h2 id="orgb25c9c9">Adding the CMSIS</h2>
+<div class="outline-text-2" id="text-orgb25c9c9">
 <p>
 The CMSIS (Cortex Microcontroller Software Interface Standard) is the standard interface API for all ARM chips. It's common across all ARM vendors and STM's LL is build on top of this common layer. The CMSIS is also provided to us with the <b>STM Cube HAL</b> we downloaded - under <code>STM32Cube_FW_F1_V1.6.0/Drivers/CMSIS</code>. I copied this one over in its entirety. 
 </p>
@@ -169,12 +124,12 @@ B/c the <b>bluepill</b> uses a <code>STM32F103C8T6</code>, this maps to a propro
 
 
 <div class="org-src-container">
-<pre class="src src-cmake">set(STM32_DEVICE_GROUP "STM32F103xB" CACHE STRING
- "Chip configuration as defined in stm32f1xx.h (default value for the bluepill)")
+<pre class="src src-cmake"><span style="color: #006699;">set</span>(STM32_DEVICE_GROUP <span style="color: #008000;">"STM32F103xB"</span> CACHE STRING
+ <span style="color: #008000;">"Chip configuration as defined in stm32f1xx.h (default value for the bluepill)"</span>)
 
-target_compile_definitions(ll PUBLIC ${STM32_DEVICE_GROUP})
-target_compile_definitions(ll PUBLIC "USE_FULL_LL_DRIVER")
-target_include_directories(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
+<span style="color: #006699;">target_compile_definitions</span>(ll PUBLIC ${<span style="color: #BA36A5;">STM32_DEVICE_GROUP</span>})
+<span style="color: #006699;">target_compile_definitions</span>(ll PUBLIC <span style="color: #008000;">"USE_FULL_LL_DRIVER"</span>)
+<span style="color: #006699;">target_include_directories</span>(ll PUBLIC CMSIS/Device/ST/STM32F1xx/Include)
 </pre>
 </div>
 
@@ -183,8 +138,8 @@ The very last step is to include the actual CMSIS itself which is simply in <cod
 </p>
 
 <div class="org-src-container">
-<pre class="src src-cmake">target_include_directories(ll PUBLIC CMSIS/Include)
-target_compile_options(ll PUBLIC
+<pre class="src src-cmake"><span style="color: #006699;">target_include_directories</span>(ll PUBLIC CMSIS/Include)
+<span style="color: #006699;">target_compile_options</span>(ll PUBLIC
   -mthumb
   -mcpu=cortex-m3
   -mfloat-abi=soft
@@ -204,7 +159,7 @@ target_compile_options(ll PUBLIC
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: George Kontsevich</p>
-<p class="date">Created: 2019-03-02 六 11:18</p>
+<p class="date">Created: 2019-07-25 Thu 11:08</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
